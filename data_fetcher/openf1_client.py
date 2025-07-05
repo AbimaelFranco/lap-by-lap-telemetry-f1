@@ -18,6 +18,6 @@ def fetch_car_data(driver_number: int, session_key: int) -> pd.DataFrame:
     url = f"{API_BASE}/car_data"
     params = {"driver_number": driver_number, "session_key": session_key}
     r = requests.get(url, params=params, headers=HEADERS)
-    r.raused_for_status()
+    r.raise_for_status()
     df = pd.DataFrame(r.json())
     return df

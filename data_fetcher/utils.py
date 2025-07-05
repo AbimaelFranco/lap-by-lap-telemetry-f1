@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 def verify_data(df: pd.DataFrame) -> bool:
@@ -15,18 +16,25 @@ def verify_data(df: pd.DataFrame) -> bool:
         print(f"Got the columns: {column_list}")
         return True
 
-def save_data(df: pd.DataFrame, driver_number: int, session_key: int) -> None:
-    """Saves the DataFrame to CSV and Excel files."""
+def save_data(df: pd.DataFrame, driver_number: int, session_key: int, data_type: str) -> None:
+    """
+    Saves the DataFrame to CSV and Excel files with filenames
+    based on driver, session, and data type.
+    """
     if verify_data(df):
-        csv_filename = f"{driver_number}_telemetry_laps_{session_key}.csv"
-        excel_filename = f"{driver_number}_telemetry_laps_{session_key}.xlsx"
+        base_dir = "telemetry_data"
+        driver_folder = os.path.join(base_dir, str(driver_number))
+        os.makedirs(driver_folder, exist_ok=True)
 
-        df.to_csv(csv_filename, index=False)
-        df.to_excel(excel_filename, index=False)
-        print(f"Data saved to '{csv_filename}' and '{excel_filename}'")
+        base_filename = f"{driver_number}_telemetry_{data_type}_{session_key}"
+        csv_path = os.path.join(driver_folder, f"{base_filename}.csv")
+        excel_path = os.path.join(driver_folder, f"{base_filename}.xlsx")
+
+        df.to_csv(csv_path, index=False)
+        df.to_excel(excel_path, index=False)
+        print(f"Data saved to '{csv_path}' and '{excel_path}'")
     else:
-        print("No data to save.")
-        
+        print(f"No {data_type} data to save.")      
 
 def set_full_display() -> None:
     """Configures pandas to display all rows and columns without truncation."""
