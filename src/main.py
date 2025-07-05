@@ -1,5 +1,5 @@
 from data_fetcher.openf1_client import fetch_laps_data, fetch_car_data
-from data_fetcher.utils import verify_data, save_data
+from data_fetcher.utils import save_data, verify_data
 
 DRIVER_NUMBER = 4  # Lando Norris
 SESSION_KEY = 9955  # Carrera en Spielberg

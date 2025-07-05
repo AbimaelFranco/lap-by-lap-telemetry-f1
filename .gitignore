@@ -1,0 +1,12 @@
+# Ignore virtual environments
+venv/
+.env/
+
+# Bytecode and Python cache
+__pycache__/
+*.py[cod]
+
+# Power BI temp files
+*.pbip
+*.pbit
+*.tmp
