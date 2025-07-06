@@ -21,3 +21,12 @@ def fetch_car_data(driver_number: int, session_key: int) -> pd.DataFrame:
     r.raise_for_status()
     df = pd.DataFrame(r.json())
     return df
+
+def fetch_drivers_data(session_key: int) -> pd.DataFrame:
+    """Downloads the drivers data in a given session."""
+    url = f"{API_BASE}/drivers"
+    params = {"session_key": session_key}
+    r = requests.get(url, params=params, headers=HEADERS)
+    r.raise_for_status()
+    df = pd.DataFrame(r.json())
+    return df
