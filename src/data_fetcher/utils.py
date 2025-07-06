@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from typing import Optional
 
 def verify_data(df: pd.DataFrame) -> bool:
     """Verifies if the DataFrame is empty and shows useful info."""
@@ -16,7 +17,7 @@ def verify_data(df: pd.DataFrame) -> bool:
         print(f"Got the columns: {column_list}")
         return True
 
-def save_data(df: pd.DataFrame, driver_number: int, session_key: int, data_type: str) -> None:
+def save_data(df: pd.DataFrame, session_key: int, data_type: str, driver_number: Optional[int] = None) -> None:
     """
     Saves the DataFrame to CSV and Excel files with filenames
     based on driver, session, and data type.
@@ -29,7 +30,11 @@ def save_data(df: pd.DataFrame, driver_number: int, session_key: int, data_type:
         driver_folder = os.path.join(base_dir, str(driver_number))
         os.makedirs(driver_folder, exist_ok=True)
 
-        base_filename = f"{driver_number}_telemetry_{data_type}_{session_key}"
+        if driver_number is not None:
+            base_filename = f"{driver_number}_telemetry_{data_type}_{session_key}"
+        else:
+            base_filename = f"telemetry_{data_type}_{session_key}"
+
         csv_path = os.path.join(driver_folder, f"{base_filename}.csv")
         excel_path = os.path.join(driver_folder, f"{base_filename}.xlsx")
 
