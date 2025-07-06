@@ -22,6 +22,9 @@ def save_data(df: pd.DataFrame, driver_number: int, session_key: int, data_type:
     based on driver, session, and data type.
     """
     if verify_data(df):
+
+        split_datetime_column(df)
+
         base_dir = "telemetry_data"
         driver_folder = os.path.join(base_dir, str(driver_number))
         os.makedirs(driver_folder, exist_ok=True)
@@ -32,7 +35,7 @@ def save_data(df: pd.DataFrame, driver_number: int, session_key: int, data_type:
 
         df.to_csv(csv_path, index=False)
         df.to_excel(excel_path, index=False)
-        print(f"Data saved to '{csv_path}' and '{excel_path}'")
+        print(f"Data saved to '{csv_path}' and '{excel_path}' \n")
     else:
         print(f"No {data_type} data to save.")      
 
@@ -42,3 +45,33 @@ def set_full_display() -> None:
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', 0)
     pd.set_option('display.max_colwidth', None)
+
+def split_datetime_column(df: pd.DataFrame) -> pd.DataFrame:
+    """Detects the first datetime-like column and splits it into 'date_only' and 'time_only' columns."""
+    datetime_col = None
+
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            datetime_col = col
+            break
+        try:
+            # Try parsing to datetime without modifying original
+            pd.to_datetime(df[col], errors="raise")
+            datetime_col = col
+            break
+        except Exception:
+            continue
+
+    if datetime_col is None:
+        raise ValueError("No datetime-like column found in the DataFrame.")
+
+    # Convert and strip timezone
+    df[datetime_col] = pd.to_datetime(df[datetime_col], errors="coerce", utc=True).dt.tz_convert(None)
+
+    if df[datetime_col].isnull().all():
+        raise ValueError(f"Column '{datetime_col}' could not be parsed to datetime.")
+
+    df["date_only"] = df[datetime_col].dt.date
+    df["time_only"] = df[datetime_col].dt.time
+
+    return df
