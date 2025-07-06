@@ -10,3 +10,6 @@ __pycache__/
 *.pbip
 *.pbit
 *.tmp
+
+# test files
+tests/
