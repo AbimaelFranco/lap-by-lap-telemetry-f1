@@ -30,3 +30,12 @@ def fetch_drivers_data(session_key: int) -> pd.DataFrame:
     r.raise_for_status()
     df = pd.DataFrame(r.json())
     return df
+
+def fetch_intervals_data(driver_number: int, session_key: int) -> pd.DataFrame:
+    """Downloads the intervals data in a given session."""
+    url = f"{API_BASE}/intervals"
+    params = {"driver_number": driver_number, "session_key": session_key}
+    r = requests.get(url, params=params, headers=HEADERS)
+    r.raise_for_status()
+    df = pd.DataFrame(r.json())
+    return df
