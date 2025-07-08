@@ -7,8 +7,8 @@ SESSION_KEY = 9955  # Carrera en Spielberg
 
 def main():
     print("Downloading lap telemetry data for Lando Norris...")
-    laps_df = fetch_laps_data(DRIVER_NUMBER, SESSION_KEY)
-    car_df = fetch_car_data(DRIVER_NUMBER, SESSION_KEY)
+    laps_df = fetch_laps_data(SESSION_KEY, DRIVER_NUMBER)
+    car_df = fetch_car_data(SESSION_KEY, DRIVER_NUMBER)
     drivers_df = fetch_drivers_data(SESSION_KEY)
 
     save_data(laps_df, SESSION_KEY, "laps", DRIVER_NUMBER)
