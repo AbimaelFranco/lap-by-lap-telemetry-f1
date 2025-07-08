@@ -33,7 +33,7 @@ def save_data(df: pd.DataFrame, session_key: int, data_type: str, driver_number:
         if driver_number is not None:
             base_filename = f"{driver_number}_telemetry_{data_type}_{session_key}"
         else:
-            base_filename = f"telemetry_{data_type}_{session_key}"
+            base_filename = f"all_telemetry_{data_type}_{session_key}"
 
         csv_path = os.path.join(driver_folder, f"{base_filename}.csv")
         excel_path = os.path.join(driver_folder, f"{base_filename}.xlsx")
